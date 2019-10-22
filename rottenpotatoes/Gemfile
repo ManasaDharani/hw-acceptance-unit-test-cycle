@@ -1,19 +1,21 @@
 source 'https://rubygems.org'
 
-ruby '2.4.0'
+ruby '2.4.4'
 gem 'rails', '4.2.10'
+gem 'simplecov', :require => false
+gem 'pg', '~> 0.21'
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 # for Heroku deployment - as described in Ap. A of ELLS book
 group :development, :test do
-  gem 'sqlite3'
+  gem 'pg', '~> 0.21'
   gem 'byebug'
   gem 'database_cleaner', '1.4.1'
   gem 'capybara', '2.4.4'
   gem 'launchy'
   gem 'rspec-rails', '3.7.2'
-  gem 'ZenTest', '4.11.0'
+  gem 'ZenTest', '4.11.2'
 end
 
 group :test do
@@ -21,7 +23,7 @@ group :test do
   gem 'cucumber-rails-training-wheels'
 end
 group :production do
-  gem 'pg'
+  gem 'pg', '~> 0.21'
 end
 
 # Gems used only for assets and not required

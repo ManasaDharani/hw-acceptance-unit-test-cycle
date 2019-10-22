@@ -1,7 +1,7 @@
 class MoviesController < ApplicationController
   
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date, :director)
   end
 
   def show
@@ -11,6 +11,8 @@ class MoviesController < ApplicationController
   end
 
   def index
+    #render :text => params[:sort]
+    director = params[:director]
     sort = params[:sort] || session[:sort]
     case sort
     when 'title'
@@ -31,6 +33,10 @@ class MoviesController < ApplicationController
       redirect_to :sort => sort, :ratings => @selected_ratings and return
     end
     @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
+
+    #if director!=nil
+    #  @movies = Movie.where(director: director)
+    #end
   end
 
   def new
@@ -60,5 +66,20 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+   def similar_movies
+    id = params[:id]
 
+    director = Movie.find(id).director
+    #render:text => director
+
+      if(director== nil)
+      #render:text => "sdfnb"
+      flash[:notice] = "'#{Movie.find(id).title}' has no director info."
+      redirect_to movies_path and return
+    else
+      #render:text => "yup"
+      @movies = Movie.where(director: director)
+      end
+    #,dsgnfkj
+  end
 end
