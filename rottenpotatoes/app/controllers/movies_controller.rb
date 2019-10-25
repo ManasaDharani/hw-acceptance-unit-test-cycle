@@ -72,7 +72,7 @@ class MoviesController < ApplicationController
     director = Movie.find(id).director
     #render:text => director
 
-      if(director== nil)
+      if(director==nil || director.blank? || director.length == 0)
       #render:text => "sdfnb"
       flash[:notice] = "'#{Movie.find(id).title}' has no director info."
       redirect_to movies_path and return

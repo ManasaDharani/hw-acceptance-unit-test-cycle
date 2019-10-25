@@ -78,7 +78,7 @@ describe MoviesController do
     end 
   end
     
-    #HW3 Happy oath
+    #HW3 Happy path
   describe "director" do
         context "When specified movie has a director" do
             
@@ -100,10 +100,10 @@ describe MoviesController do
             it "redirect to the movies page" do
                 @id = "-1"
                 @movie = double('null movie').as_null_object
-                expect(Movie).to receive(:find).with(@id).and_return(@movie)
+                expect(Movie).to receive(:find).with(@id).and_return(@movie).twice
                 get :similar_movies, id: @id
-                #expect(flash[:notice]).to eq("/has no director info./")
-                expect(response).to render_template(:similar_movies)
+                expect(flash[:notice]).to match(/has no director info./)
+                expect(response).to redirect_to(movies_path)
             
             end
         end
