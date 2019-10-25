@@ -6,10 +6,9 @@ describe MoviesController do
 #Create a row/movie C
   describe "create" do
     it "create movie with provided parameters" do
-        @defaults = {title: "Test", rating: "G", director: "XYZ"}
-        
-        post :create, movie: @defaults
-        expect(flash[:notice]).to eq("Test was successfully created.")
+        @test = {title: "Newmovie", rating: "PG", director: "Dir1"}
+        post :create, movie: @test
+        expect(flash[:notice]).to eq("Newmovie was successfully created.")
         expect(response).to redirect_to(movies_path)
     end
   end
@@ -36,7 +35,6 @@ describe MoviesController do
         @id = "-1"
         @movie = double('null movie').as_null_object
         expect(Movie).to receive(:find).and_return(@movie)
-        
         get :edit, id: @id
         expect(response).to render_template(:edit)
     end
@@ -45,10 +43,9 @@ describe MoviesController do
     it "update existing movie" do
         @id = "-1"
         @movie = double('null movie').as_null_object
-        @defaults = {title: "Test", rating: "R", director: "Bill"}
-        expect(Movie).to receive(:find).with(@id).and_return(@movie)
-        
-        put :update, id: @id, movie: @defaults
+        @test = {title: "Newmovie", rating: "PG", director: "Dir1"}
+        expect(Movie).to receive(:find).with(@id).and_return(@movie) 
+        put :update, id: @id, movie: @test
         expect(flash[:notice]).to match(/was successfully updated./)
         expect(response).to redirect_to(movie_path(@movie))
     end
@@ -59,7 +56,6 @@ describe MoviesController do
         @id = "-1"
         @movie = double('null movie').as_null_object
         expect(Movie).to receive(:find).with(@id).and_return(@movie)
-        
         delete :destroy, id: @id
         expect(flash[:notice]).to match(/Movie || deleted./)
         expect(response).to redirect_to(movies_path)
@@ -81,17 +77,12 @@ describe MoviesController do
     #HW3 Happy path
   describe "director" do
         context "When specified movie has a director" do
-            
             it "find movies with the same director" do
-            
             @id = "-1"
             @movie = double('Test', director: 'Alex')
-            
             expect(Movie).to receive(:find).with(@id).and_return(@movie)
             expect(@movie).to receive(:director)
-            
             get :similar_movies, id: @id
-            
             expect(response).to render_template(:similar_movies)
         end
     end
@@ -100,7 +91,8 @@ describe MoviesController do
             it "redirect to the movies page" do
                 @id = "-1"
                 @movie = double('null movie').as_null_object
-                expect(Movie).to receive(:find).with(@id).and_return(@movie).twice
+                expect(Movie).to receive(:find).with(@id)
+                .and_return(@movie).twice 
                 get :similar_movies, id: @id
                 expect(flash[:notice]).to match(/has no director info./)
                 expect(response).to redirect_to(movies_path)
